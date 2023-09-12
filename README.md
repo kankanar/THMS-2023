@@ -1,5 +1,6 @@
 # THMS-2023
-This is the code for my IEEE Transaction on Human-Machine Systems paper titled *["Hand segmentation with dense dilated U-Net and structurally incoherent non-negative matrix factorization based gesture recognition"]*. I hope you find this useful
+This is the code for my IEEE Transaction on Human-Machine Systems paper titled [*"Hand segmentation with dense dilated U-Net and structurally incoherent non-negative matrix factorization based gesture recognition"*]. I hope you find this useful
+![alt text](https://github.com/kankanar/THMS-2023/block_dia.png)
 # Proposed Algorithm
 The proposed algorithm in the paper *["Hand segmentation with dense dilated U-Net and structurally incoherent non-negative matrix factorization based gesture recognition"]* has three major steps. The end goal of our algorithm is to perform hand gesture recognition. We identified the problem as a two-step problem. (I) Hand segmentation and (II) Hand gesture recognition. In the current literature, there are very few approaches that perform joint hand segmentation + gesture recognition. The main reason is being the dataset for hand gestures does not normally come with the segmentation mask. We tackle the first sub-problem as a semi-supervised hand segmentation approach considering that there is no segmentation mask available. This step is handled by learning-based matting. The code is also subdivided into three folders.
 ## Step 1: Learning Based Matting:
