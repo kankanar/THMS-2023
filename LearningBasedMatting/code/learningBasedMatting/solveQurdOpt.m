@@ -1,15 +1,16 @@
-function alpha_star=getAlpha_star(mask)
-% alpha_star=getAlpha_star(mask) get the pri-known alpha values according
-% to the mask. See equation (6) in our iccv2009 paper.
+function alpha=solveQurdOpt(L,C,alpha_star)
+% alpha=solveQurdOpt(L,C,alpha_star) solves the quadratic optimization
+% problem. See equation (7) in our iccv09 paper.
 % 
 % Input arguments:
-% mask:   MxN matrix specifying scribbles, with 1 foreground, -1 background
-%         and 0 otherwise
-% 
-% Output arguments:
+% L:     (MxN)X(MxN) sparse laplacian matrix
+% C:     (MxN)X(MxN) sparse regularization matrix
 % alpha_star:     (MxN) matrix showing the prio-known value of alpha.
 %                 The value is 1 for foreground scribble pixels, and 0
 %                 otherwise
+% 
+% Output arguments:
+% alpha:     (MxN) matrix of alpha solution
 % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % @InProceedings{ZhengICCV09,
@@ -25,8 +26,16 @@ function alpha_star=getAlpha_star(mask)
 % http://sites.google.com/site/zhengvision/
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-disp('Computing preknown alpha values ... ...')
+disp('Solving quadratic optimization problem ... ...')
+lambda=1e-6;
+D=speye(size(L,1),size(L,2));
+alpha=(L+C+D*lambda)\(C*alpha_star(:));
+alpha=reshape(alpha,size(alpha_star,1),size(alpha_star,2));
 
-alpha_star=zeros(size(mask,1),size(mask,2));
-alpha_star(mask>0)=1;
-alpha_star(mask<0)=-1;
+% if alpha value of labelled pixels are -1 and 1, the resulting alpha are
+% within [-1 1], then the alpha results need to be mapped to [0 1]
+if min(alpha_star(:))==-1
+    alpha=alpha*0.5+0.5;
+end
+% 
+alpha=max(min(alpha,1),0);

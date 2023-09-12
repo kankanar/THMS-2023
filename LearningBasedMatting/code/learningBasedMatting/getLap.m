@@ -1,15 +1,21 @@
-function alpha_star=getAlpha_star(mask)
-% alpha_star=getAlpha_star(mask) get the pri-known alpha values according
-% to the mask. See equation (6) in our iccv2009 paper.
+function L=getLap(imdata,winsz,mask,lambda)
+% L=getLap(imdata,winsz) get the laplacian matrix based on imdata
+% (image data) and winsz (local window size)
 % 
 % Input arguments:
+% imdata: MxNxd matrix. Image size is MxN, and feature number is d. Value
+%         range is within [0 255]
+% winsz:  vec with 2-components showing size of local window for training
+%         local linear models. Values will be obliged to be odd.
 % mask:   MxN matrix specifying scribbles, with 1 foreground, -1 background
 %         and 0 otherwise
+% lambda: para of the regularization in training local linear model
 % 
 % Output arguments:
-% alpha_star:     (MxN) matrix showing the prio-known value of alpha.
-%                 The value is 1 for foreground scribble pixels, and 0
-%                 otherwise
+% L:     (MxN)X(MxN) sparse matrix
+% 
+% Note:
+% 1. boundary pixel won't be used in training local models
 % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % @InProceedings{ZhengICCV09,
@@ -25,8 +31,5 @@ function alpha_star=getAlpha_star(mask)
 % http://sites.google.com/site/zhengvision/
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-disp('Computing preknown alpha values ... ...')
-
-alpha_star=zeros(size(mask,1),size(mask,2));
-alpha_star(mask>0)=1;
-alpha_star(mask<0)=-1;
+disp('Computing Laplacian matrix ... ...')
+L=getLap_iccv09_overlapping(imdata,winsz,mask,lambda);

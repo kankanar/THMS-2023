@@ -1,15 +1,15 @@
-function alpha_star=getAlpha_star(mask)
-% alpha_star=getAlpha_star(mask) get the pri-known alpha values according
-% to the mask. See equation (6) in our iccv2009 paper.
+function [alpha]=learningBasedMatting(imdata,mask)
+% [alpha]=learningBasedMatting(im,mask) computes matte given image and
+% scribble mask
 % 
 % Input arguments:
-% mask:   MxN matrix specifying scribbles, with 1 foreground, -1 background
-%         and 0 otherwise
+% imdata:   MxNxd image data matrix. Image size is MxN, and the number of features is d. Value
+%           range is within [0 255]
+% mask:     MxN matrix specifying scribbles, with 1 foreground, -1 background
+%           and 0 otherwise
 % 
 % Output arguments:
-% alpha_star:     (MxN) matrix showing the prio-known value of alpha.
-%                 The value is 1 for foreground scribble pixels, and 0
-%                 otherwise
+% alpha:    (MxN) matrix of alpha solution
 % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % @InProceedings{ZhengICCV09,
@@ -25,8 +25,18 @@ function alpha_star=getAlpha_star(mask)
 % http://sites.google.com/site/zhengvision/
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-disp('Computing preknown alpha values ... ...')
+% get laplacian matrix
+winsz=3;
+c=800;
+lambda=0.0000001;
 
-alpha_star=zeros(size(mask,1),size(mask,2));
-alpha_star(mask>0)=1;
-alpha_star(mask<0)=-1;
+L=getLap(imdata,winsz,mask,lambda);
+
+% get regularization matrix
+C=getC(mask,c);
+
+% get already known values
+alpha_star=getAlpha_star(mask);
+
+% solve alpha
+alpha=solveQurdOpt(L,C,alpha_star);
