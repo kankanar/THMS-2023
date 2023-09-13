@@ -2,7 +2,7 @@
 This is the code for my IEEE Transaction on Human-Machine Systems paper titled [*"Hand segmentation with dense dilated U-Net and structurally incoherent non-negative matrix factorization based gesture recognition"*]. I hope you find this useful
 # Proposed Algorithm
 The proposed algorithm in the paper *["Hand segmentation with dense dilated U-Net and structurally incoherent non-negative matrix factorization based gesture recognition"]* has three major steps. The end goal of our algorithm is to perform hand gesture recognition. We identified the problem as a two-step problem. (I) Hand segmentation and (II) Hand gesture recognition. In the current literature, there are very few approaches that perform joint hand segmentation + gesture recognition. The main reason is being the dataset for hand gestures does not normally come with the segmentation mask. We tackle the first sub-problem as a semi-supervised hand segmentation approach considering that there is no segmentation mask available. This step is handled by learning-based matting. The code is also subdivided into three folders.
-![block_dia.png](block_dia.png)
+![block dia.png](block dia.png)
 ## Step 1: Learning Based Matting:
 The code is developed from a well-known work "Learning based digital matting". We use image matting to generate pseudo-labels from bounding box over hand regions which can be easily drawn or already available.
 
