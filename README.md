@@ -50,5 +50,13 @@ The data should be stored in the following structure:
  
 The code for this part can be found in the folder **DDU-NET**. To prepare the data, we provided the code `generateDataForUnet.m` which will convert the data into the above file structure. Then you should run the `maindensedilatedunet.py` for training and generating the segmentation results. The code `segmentAndCropData.m` is responsible for segmenting the hands using the generated mask in the previous step and taking a tight crop around the hand region after segmentation for the gesture recognition step.
  
+## Step 2: Structurally incoherent nonnegative matrix factorization (SINMF) for hand gesture classification:
+This was mainly developed using MATLAB. Thw code are given in **SINMF** folder.
+### Phase 1: CNN training
+The sample code for CNN training using MATLAB is given in `finetuneVGG16.m`. You can also modify the specified architecture according to your requirements. For this particular project, we tried a couple of other architectures (please see the experimental section in the paper for complete details) and found that VGG19 works best. You need to provide training and test folders where images are divided into subfolders according to the class. Once the training is done, save the model for feature extraction from training and testing images.
+### Phase 2: Feature extraction: 
+The sample code for feature extraction is given in the `extractFeatures.m`. Once CNN training is done, CNN features are extracted from training and testing images. These are converted into a data matrix for the SINMF part.
+### Phase 3: SINMF
+The sample code for baseline using only NMF is given in `nmf_cnn_matlab.m` and the sample code for SINMF is given in the `sinmf_cnn_matlab.m`. In both cases you need to provide the features extracted from images for further training. 
 
 
